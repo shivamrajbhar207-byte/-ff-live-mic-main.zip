@@ -1,0 +1,33 @@
+FF LIVE MIC — Phase 0.8.1 (cleanup pass) source status
+
+Implemented in source:
+- RootEncoder 2.8.1 RtmpStream transport and ConnectChecker callbacks
+- ScreenSource(MediaProjection) -> RootEncoder H.264 video encoder
+- MixAudioSource(MediaProjection) -> microphone + permitted internal playback PCM mix -> AAC encoder (Android 10+)
+- RTMP/RTMPS publish URL assembled in memory from YouTube server URL + stream key
+- Foreground service lifecycle and Stop Live action in notification
+- Runtime permission handling for microphone and Android 13+ notifications
+- Stream key is masked, validated, not logged, and UI field cleared after handoff
+- Android 8/9 fallback: microphone-only audio
+
+Validation status:
+- Original ZIP archive CRC integrity checked successfully.
+- RTMP Kotlin character-literal bug corrected and source text verified.
+- Gradle workflow updated for Java 17, Android SDK 35, Gradle 8.9, and APK artifact upload.
+- Kotlin plugin and Java/Kotlin JVM targets aligned in Gradle configuration.
+- NOT built in this workspace: a full Android SDK/Gradle build has not been executed here.
+- NOT installed or tested on a physical Android device.
+- NOT tested against a real YouTube Live ingest endpoint.
+- No APK is included.
+
+Known runtime constraints:
+- Internal playback capture requires Android 10+ and app/game playback-capture eligibility.
+- H.264/AAC availability and performance depend on device MediaCodec implementations.
+- Network, thermal load, orientation, bitrate stability and audio levels require device testing.
+- Prefer RTMPS if YouTube Studio provides it; standard RTMP does not encrypt the stream key in transit.
+
+Cleanup pass:
+- Signing is now optional (falls back to debug key); CI no longer requires secrets.
+- Fixed video profile bug: resolution was always capped at 1280 even for Ultra/Auto-high.
+- Removed unneeded cleartext-traffic flag; added R8 rules, .gitignore, README.
+- versionName aligned to 0.8.1.
